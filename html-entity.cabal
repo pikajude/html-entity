@@ -17,7 +17,7 @@ custom-setup
 flag tablegen
   default:     False
   manual:      True
-  description: Build the \"tablegen\" executable (for developer use)
+  description: Build the \"tablegen\" executable for development use
 
 flag werror
   default:     False
