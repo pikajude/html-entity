@@ -11,10 +11,10 @@ tested-with:        GHC == 7.8.4, GHC == 7.10.3, GHC == 8.0.2, GHC == 8.2.2, GHC
 category:           Text
 build-type:         Custom
 extra-source-files: ChangeLog.md
-cabal-version:      2.0
+cabal-version:      >= 1.10
 
 custom-setup
-  setup-depends: base == 4.*, Cabal >= 2.0, cabal-doctest >= 1 && < 1.1
+  setup-depends: base == 4.*, Cabal, cabal-doctest >= 1 && < 1.1
 
 source-repository head
   type:     git
