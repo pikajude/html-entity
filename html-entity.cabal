@@ -1,5 +1,7 @@
 name:               html-entity
 version:            0.1.0.0
+synopsis:           HTML entity decoding and encoding for Text
+description:        Fast, attoparsec-powered HTML entity decoding and encoding for Text
 license:            BSD3
 license-file:       LICENSE
 author:             Jude Taylor
@@ -13,6 +15,10 @@ cabal-version:      2.0
 
 custom-setup
   setup-depends: base == 4.*, Cabal >= 2.0, cabal-doctest >= 1 && < 1.1
+
+source-repository head
+  type:     git
+  location: https://github.com/pikajude/html-entity
 
 flag tablegen
   default:     False
@@ -58,6 +64,7 @@ executable tablegen
 test-suite doctest
   type:             exitcode-stdio-1.0
   main-is:          doctests.hs
+  other-modules:    Build_doctests
   autogen-modules:  Build_doctests
   hs-source-dirs:   tests
   build-depends:    base, doctest
