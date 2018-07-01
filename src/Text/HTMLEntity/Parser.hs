@@ -10,16 +10,15 @@ import qualified Data.HashMap.Strict as H
 import Data.Ix
 import Data.Monoid.Compat
 import qualified Data.Text as T
-import qualified Text.HTMLEntity.Table as Table
 import Prelude.Compat
+import qualified Text.HTMLEntity.Table as Table
 
 decodeParser :: Parser T.Text
-decodeParser =
-    liftA2
-        (<>)
-        ((A.takeWhile1 (/= '&') <?> "plain text") <|> (ent <?> "entity"))
-        (eof <|> decodeParser)
+decodeParser = go
   where
+    go =
+        eof <|>
+        liftA2 (<>) ((A.takeWhile1 (/= '&') <?> "plain text") <|> (ent <?> "entity")) go
     eof = "" <$ endOfInput
     ent = do
         void $ char '&'

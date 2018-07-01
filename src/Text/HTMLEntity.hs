@@ -1,9 +1,17 @@
 -- | Efficient decoding and encoding of HTML entities in text.
-module Text.HTMLEntity where
+module Text.HTMLEntity
+    ( -- * Usage
+      decode
+    , decode'
+    , encode
+    -- ** Partial decoding/encoding
+    -- $partial
+    , decodePartial
+    , encodePartial
+    ) where
 
 import Data.Attoparsec.Text
 import Data.Text (Text)
-import qualified Data.Text as T
 import Prelude.Compat
 import Text.HTMLEntity.Parser
 
@@ -11,6 +19,7 @@ import Text.HTMLEntity.Parser
 -- >>> :set -XOverloadedStrings
 -- >>> import qualified Data.Text.IO as T
 
+-- *** Decoding/encoding
 -- | Decode HTML entities contained in the given text. Returns
 -- @Left decodeError@ on failure. The parser will do its best to explain
 -- the problem.
@@ -27,9 +36,7 @@ import Text.HTMLEntity.Parser
 -- >>> decode "&#xffffffff;"
 -- Left "entity: Failed reading: 4294967295 is out of Char range"
 decode :: Text -> Either String Text
-decode t
-    | T.null t = Right t
-decode x = parseOnly decodeParser x
+decode = parseOnly decodeParser
 {-# INLINE decode #-}
 
 -- | Like 'decode', except that if a decode error occurs, the original
@@ -62,3 +69,18 @@ decode' n = either (const n) id $ decode n
 encode :: Text -> Text
 encode = either (error "html-entity internal encoding error") id . parseOnly encodeParser
 {-# INLINE encode #-}
+
+{- $partial
+These functions are provided for convenience if you're using attoparsec
+in a streaming style, and all return 'Result' values. Use them as you
+would normally.
+-}
+-- | Partial 'decode'.
+decodePartial :: Text -> Result Text
+decodePartial = parse decodeParser
+{-# INLINE decodePartial #-}
+
+-- | Partial 'encode'.
+encodePartial :: Text -> Result Text
+encodePartial = parse encodeParser
+{-# INLINE encodePartial #-}
