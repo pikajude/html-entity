@@ -5,7 +5,11 @@ module Main where
 
 import Data.Aeson hiding (pairs)
 import qualified Data.ByteString as B
+import Data.Function
 import qualified Data.HashMap.Strict as H
+import Data.List
+import Data.Monoid
+import Data.Ord
 import qualified Data.Text as T
 import Data.Tuple
 import Language.Haskell.Exts.Build
@@ -47,20 +51,32 @@ mkmod (Object es) =
               (Just (ImportSpecList () False [IVar () (name "pack")]))
         ]
         [ nameBind (name "names") $
-          app (var $ name "fromList") $ listE $ map asMapPair pairs
+          app (var $ name "fromList") $
+          listE $ map asMapPair $ nubBy ((==) `on` fst) $ sortBy (comparing fst) pairs
+        , noinline "names"
         , nameBind (name "entitiesMulti") $
           app (var $ name "fromList") $
-          listE $ map (asMapPair . swap) $ filter (\(_, b) -> T.length b > 1) pairs
+          listE $
+          map (asMapPair . swap) $
+          nubBy ((==) `on` snd) $
+          sortBy (comparing snd <> comparing (T.length . fst)) $
+          filter (\(_, b) -> T.length b > 1) pairs
+        , noinline "entitiesMulti"
         , nameBind (name "entitiesSingle") $
           app (var $ name "fromList") $
-          listE $ map (asMapCharText . swap) $ filter (\(_, b) -> T.length b == 1) pairs
+          listE $
+          map (asMapCharText . swap) $
+          nubBy ((==) `on` snd) $
+          sortBy (comparing snd <> comparing (T.length . fst)) $
+          filter (\(_, b) -> T.length b == 1) pairs
+        , noinline "entitiesSingle"
         ]
-    -- escape sequence -> characters
   where
     asMapCharText (key, val) =
         tuple [charE $ T.head key, app (var $ name "pack") (textE val)]
     asMapPair (key, val) =
         tuple [app (var $ name "pack") (textE key), app (var $ name "pack") (textE val)]
+    noinline x = InlineSig () False Nothing (UnQual () (name x))
     pairs :: [(T.Text, T.Text)]
     pairs =
         map
