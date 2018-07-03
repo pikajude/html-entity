@@ -1,5 +1,5 @@
 name:               html-entity
-version:            0.1.0.0
+version:            0.1.1.0
 synopsis:           HTML entity decoding and encoding for Text
 description:        Fast, attoparsec-powered HTML entity decoding and encoding for Text
 license:            BSD3
