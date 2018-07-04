@@ -6,7 +6,7 @@ license:            BSD3
 license-file:       LICENSE
 author:             Jude Taylor
 maintainer:         me@jude.xyz
-tested-with:        GHC == 7.8.4, GHC == 8.0.2, GHC == 8.2.2, GHC == 8.4.3
+tested-with:        GHC == 8.0.2, GHC == 8.2.2, GHC == 8.4.3
 category:           Text
 build-type:         Custom
 extra-source-files: ChangeLog.md
@@ -35,13 +35,8 @@ library
   other-modules:      Text.HTMLEntity.Parser
                       Text.HTMLEntity.Table
   hs-source-dirs:     src
-  build-depends:      base                 == 4.*
-                    , attoparsec
-                    , base-compat          >= 0.9
-                    , text
-                    , unordered-containers
+  build-depends:      base == 4.*, attoparsec, text, unordered-containers
   default-language:   Haskell2010
-  default-extensions: NoImplicitPrelude
   ghc-options:        -Wall
 
   if flag(werror)

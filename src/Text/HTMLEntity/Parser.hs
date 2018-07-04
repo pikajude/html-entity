@@ -8,9 +8,8 @@ import Data.Char
 import Data.Functor
 import qualified Data.HashMap.Strict as H
 import Data.Ix
-import Data.Monoid.Compat
+import Data.Monoid
 import qualified Data.Text as T
-import Prelude.Compat
 import qualified Text.HTMLEntity.Table as Table
 
 decodeParser :: Parser T.Text

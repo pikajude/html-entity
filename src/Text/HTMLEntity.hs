@@ -12,7 +12,6 @@ module Text.HTMLEntity
 
 import Data.Attoparsec.Text
 import Data.Text (Text)
-import Prelude.Compat
 import Text.HTMLEntity.Parser
 
 -- $setup
