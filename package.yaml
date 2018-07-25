@@ -1,0 +1,65 @@
+version:            0.1.3.0
+synopsis:           HTML entity decoding and encoding for Text
+description:        Fast, attoparsec-powered HTML entity decoding and encoding for Text
+license:            BSD3
+author:             Jude Taylor
+maintainer:         me@jude.xyz
+tested-with:        GHC == 8.0.2, GHC == 8.2.2, GHC == 8.4.3
+category:           Text
+extra-source-files: ChangeLog.md
+data-files:         data/*.json
+
+github: pikajude/html-entity
+
+flags:
+  tablegen:
+    description: Build the @tablegen@ executable for development use
+    default:     False
+    manual:      True
+
+  werror:
+    description: Build with -Werror
+    default:     False
+    manual:      True
+
+when:
+  - condition: "flag(werror)"
+    ghc-options: -Werror
+
+custom-setup:
+  dependencies:
+    - base == 4.*
+    - Cabal
+    - cabal-doctest >= 1 && < 1.1
+
+ghc-options:  -Wall
+dependencies: base == 4.*
+
+library:
+  exposed-modules: Text.HTMLEntity
+  source-dirs: src
+  dependencies:
+    - attoparsec
+    - text
+    - unordered-containers
+
+executables:
+  tablegen:
+    main: Tablegen.hs
+    source-dirs: exe
+    other-extensions: TypeApplications
+    dependencies:
+      - aeson
+      - bytestring
+      - haskell-src-exts
+      - text
+      - unordered-containers
+    when:
+      - condition: "!flag(tablegen)"
+        buildable: False
+
+tests:
+  doctest:
+    main: doctests.hs
+    source-dirs: tests
+    dependencies: doctest
