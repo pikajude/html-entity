@@ -22,9 +22,6 @@ extra-source-files:
     ChangeLog.md
 data-files:
     data/entities.json
-    data/EntitiesMulti.hs
-    data/EntitiesSingle.hs
-    data/Names.hs
 
 source-repository head
   type: git
